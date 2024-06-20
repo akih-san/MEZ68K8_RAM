@@ -5,10 +5,10 @@
 <br>
 EMUZ80で、MC68008を動かすメザニンボードとして、＠S_OkueさんのMEZ68008<br>
 が2022年にGithubで公開されています。<br>
-<br>
 https://github.com/satoshiokue/MEZ68008
 <br>
-MEZ68008は、PIC18F47QXX（PIC18F47Q43、PIC18F47Q84）によってコントロール<br>
+<br>
+MEZ68008は、PIC18F47QXX（PIC18F47Q43/Q84/Q83）によってコントロール<br>
 されており、メモリリソースもPIC18F47QXX内蔵のメモリを使用しています。<br>
 とてもシンプルな構造となっており、68Kに初めて触れる人には最適と言えます。<br>
 <br>
@@ -23,7 +23,7 @@ https://vintagechips.wordpress.com/2022/03/05/emuz80_reference  <br>
 <br>
 今回、68008用に、512KBのメモリとSDカードI/Fを追加したメザニンボード、<br>
 MEZ68K8_RAMを作成しました。MEZ68008と同様に、EMUZ80にアドオンすることで<br>
-作動します。<br>
+動作します。<br>
 メモリとSDカードを追加することにより、CP/M-68Kを動かすことが出来ました。<br>
 <br>
 
