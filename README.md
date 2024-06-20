@@ -113,9 +113,17 @@ https://sourceforge.net/projects/bin2mot/files/<br>
 　＜CpmtoolsGUI - neko Java Home Page＞<br>
 　http://star.gmobb.jp/koji/cgi/wiki.cgi?page=CpmtoolsGUI<br>
 <br>
-<br>
+
 # 注意
-WindowsのPower
+WindowsのPowerShellを使用して68000のバイナリ作成しますが、その際にPowerShellの<br>
+スクリプトファイル（拡張子.ps1）を使用しています。<br>
+GitHubからソースファイルをダウンロードした際は、スクリプトファイルのマクロ実行禁止に<br>
+なっていますので、それを解除する必要があります。<br>
+操作は、ファイルのプロパティを表示させて、セキュリティを許可します。<br>
+
+スクリプトファイルの実行禁止解除<br>
+![MEZ68K8_RAM 7](photo/propaty.png)
+
 # 参考
 ＜EMUZ80＞<br>
 EUMZ80はZ80CPUとPIC18F47Q43のDIP40ピンIC2つで構成されるシンプルなコンピュータです。<br>
