@@ -122,7 +122,7 @@ https://sourceforge.net/projects/bin2mot/files/<br>
 <br>
 
 # 注意
-WindowsのPowerShellを使用して68000のバイナリ作成しますが、その際にPowerShellの<br>
+WindowsのPowerShellを使用して68000のバイナリを作成しますが、その際にPowerShellの<br>
 スクリプトファイル（拡張子.ps1）を使用しています。<br>
 GitHubからソースファイルをダウンロードした際は、スクリプトファイルのマクロ実行禁止に<br>
 なっていますので、それを解除する必要があります。<br>
