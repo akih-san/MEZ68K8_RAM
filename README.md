@@ -36,7 +36,7 @@ MEZ68K8_RAM拡大<br>
 
 # 特徴<br>
 <br>
-・動作CPU : MC68008P10 10MHz<br>
+・MPU : MC68008P10 10MHz<br>
 ・Microcontroller : PIC18F47Q43, PIC18F47Q84, PIC18F47Q83<br>
 ・512K SRAM搭載(AS6C4008-55PCN)<br>
 ・μSDカードI/F（SPI)<br>
