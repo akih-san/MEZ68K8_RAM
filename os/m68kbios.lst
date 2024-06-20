@@ -1,0 +1,795 @@
+Microtec Research ASM68K Assembler - Version 6.6A
+Copyright (c) 1985-1989 Microtec Research Inc.
+ALL RIGHTS RESERVED.   Serial Number M-002201
+
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  1
+ 
+
+Command line: C:\DOS\MRI68K\ASM68K\ASM68K.EXE -l -o m68kbios.obj m68kbios.asm 
+Line Address
+1                               *	Vector Addresses
+2                               *
+3    0000008C                   trap3:	equ	$8c			*	Trap 3 vector
+4                               *
+5    000004BC                   _ccp		equ	$4BC		* V1.3
+6    000004CA                   _bdos		equ	$4CA		* V1.3
+7    00006200                   START_BIOS	equ	$6200		* V1.3
+8                               
+9    00000400                   cpm		equ	$400 		*	Lowest addr of CP/M 
+10   00008000                   TPA_S		equ	$8000
+11   00080000                   MEM_END		equ	$80000
+12   00078000                   TPA_SIZE	equ	MEM_END-TPA_S
+13                              
+14                              	org	START_BIOS
+15                              
+16                              *
+17                              *	Global Code addresses
+18                              *
+19                              	xdef	.init		* at M68KBIOA.S ( this program )
+20                              	xdef	.wboot		* at M68KBIOA.S ( this program )
+21                              *	xref	.memtab		* memory region table at M68KBIOS.C
+22                              *	xref	.biosinit	* at M68KBIOS.C
+23                              *	xref	.cbios		* at M68KBIOS.C
+24                              
+25                              .init:
+26   00006200 41F8 6234 4E71    	lea	entry,a0	* set bios call entory vector
+27   00006206 21C8 008C         	move.l	a0,trap3
+28                              
+29                              *
+30                              *	Set TPA Size
+31                              **
+32                              * struct mrt {
+33                              *	uint16_t count;
+34                              *	uint32_t tpalow;
+35                              *	uint32_t tpalen;
+36                              *} memtab;				/* Initialized in M68KBIOA.S	*/
+37                              *
+38                              
+39   0000620A 41F8 6A44 4E71    	lea	.memtab,a0		*	a0 -> Memory region table
+40   00006210 30FC 0001         	move.w	#1,(a0)+		*	1 region
+41   00006214 20FC 0000 8000    	move.l	#TPA_S,(a0)+		*	TPA starts at TPA_S
+42   0000621A 20FC 0007 8000    	move.l	#TPA_SIZE,(a0)+		*	Ends where CP/M begins
+43                              
+44   00006220 46FC 2000         	move	#$2000,sr
+45   00006224 4EB8 63EC 4E71    	jsr	.biosinit
+46   0000622A 4280              	clr.l	d0
+47   0000622C 4E75              	rts
+48                              *
+49   0000622E 4280              .wboot:	clr.l	d0
+50   00006230 4EF8 04BC         	jmp	_ccp
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  2
+ 
+
+Line Address
+51                              *
+52   00006234 2F02              entry:	move.l	d2,-(a7)
+53   00006236 2F01              	move.l	d1,-(a7)
+54   00006238 2F00              	move.l	d0,-(a7)
+55   0000623A 4EB8 6414 4E71    	jsr	.cbios
+56   00006240 DFFC 0000 000C    	add.l	#12,a7
+57   00006246 4E73              	rte
+58                              
+59                              *	Microtec MCC68K Compiler  Version 3.3K 
+60                              *	OPT	NOABSPCADD,E,CASE
+61                              m68cbios	IDNT	
+62                              *	SECTION	9,,C
+63                              	XDEF	.wakeup_pic
+64                              .wakeup_pic:
+65   00006248 2078 65C0 4E71    	MOVE.L	.pic,A0
+66   0000624E 1010              	MOVE.B	(A0),D0
+67                              _L4:
+68   00006250 2078 65BC 4E71    	MOVE.L	.preq,A0
+69   00006256 4A28 0006         	TST.B	6(A0)
+70   0000625A 66F4              	BNE.S	_L4
+71   0000625C 2078 65BC 4E71    	MOVE.L	.preq,A0
+72   00006262 1228 0007         	MOVE.B	7(A0),D1
+73   00006266 7000              	MOVEQ	#0,D0
+74   00006268 1001              	MOVE.B	D1,D0	*fr
+75   0000626A 4E75              	RTS
+76                              *	SECTION	14,,D
+77                              * allocations for .wakeup_pic
+78                              *	D0	.dummy
+79                              *	SECTION	9,,C
+80                              
+81                              * COMPILATION SUMMARY FOR .wakeup_pic
+82                              *	CODE SIZE                	   36 BYTES
+83                              *	COMPILE-TIME DYNAMIC HEAP	 3991 BYTES
+84                              *	COMPILE-TIME GLOBAL HEAP 	21105 BYTES
+85                              	XDEF	.order_b2l
+86                              .order_b2l:
+87   0000626C 2F02              	MOVE.L	D2,-(SP)
+88   0000626E 322F 000A         	MOVE.W	10(SP),D1
+89   00006272 7000              	MOVEQ	#0,D0
+90   00006274 3001              	MOVE.W	D1,D0	*fr
+91   00006276 0280 0000 00FF    	ANDI.L	#255,D0
+92   0000627C E180              	ASL.L	#8,D0
+93   0000627E 3400              	MOVE.W	D0,D2
+94   00006280 7000              	MOVEQ	#0,D0
+95   00006282 3001              	MOVE.W	D1,D0	*fr
+96   00006284 0280 0000 FF00    	ANDI.L	#65280,D0
+97   0000628A E080              	ASR.L	#8,D0
+98   0000628C 3000              	MOVE.W	D0,D0
+99   0000628E 7200              	MOVEQ	#0,D1
+100  00006290 3200              	MOVE.W	D0,D1	*fr
+101  00006292 7000              	MOVEQ	#0,D0
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  3
+ 
+
+Line Address
+102  00006294 3002              	MOVE.W	D2,D0	*fr
+103  00006296 8280              	OR.L	D0,D1
+104  00006298 3001              	MOVE.W	D1,D0
+105  0000629A 7200              	MOVEQ	#0,D1
+106  0000629C 3200              	MOVE.W	D0,D1	*fr
+107  0000629E 2001              	MOVE.L	D1,D0
+108  000062A0 241F              	MOVE.L	(SP)+,D2
+109  000062A2 4E75              	RTS
+110                             *	SECTION	14,,D
+111                             * allocations for .order_b2l
+112                             *	D2	.p1
+113                             *	D0	.p2
+114                             *	10(SP)	.data
+115                             *	SECTION	9,,C
+116                             
+117                             * COMPILATION SUMMARY FOR .order_b2l
+118                             *	CODE SIZE                	   56 BYTES
+119                             *	COMPILE-TIME DYNAMIC HEAP	 6492 BYTES
+120                             *	COMPILE-TIME GLOBAL HEAP 	21376 BYTES
+121                             	XDEF	.set_dma
+122                             .set_dma:
+123  000062A4 48E7 3800         	MOVEM.L	D2/D3/D4,-(SP)
+124  000062A8 222F 0010         	MOVE.L	16(SP),D1
+125  000062AC 2401              	MOVE.L	D1,D2
+126  000062AE 0282 0000 00FF    	ANDI.L	#255,D2
+127  000062B4 7018              	MOVEQ	#24,D0
+128  000062B6 E1AA              	LSL.L	D0,D2
+129  000062B8 2801              	MOVE.L	D1,D4
+130  000062BA 0284 0000 FF00    	ANDI.L	#65280,D4
+131  000062C0 E18C              	LSL.L	#8,D4
+132  000062C2 2601              	MOVE.L	D1,D3
+133  000062C4 0283 00FF 0000    	ANDI.L	#16711680,D3
+134  000062CA E08B              	LSR.L	#8,D3
+135  000062CC 0281 FF00 0000    	ANDI.L	#-16777216,D1
+136  000062D2 E0A9              	LSR.L	D0,D1
+137  000062D4 2078 65BC 4E71    	MOVE.L	.preq,A0
+138  000062DA 2004              	MOVE.L	D4,D0
+139  000062DC 8082              	OR.L	D2,D0
+140  000062DE 8083              	OR.L	D3,D0
+141  000062E0 8081              	OR.L	D1,D0
+142  000062E2 2140 000E         	MOVE.L	D0,14(A0)
+143  000062E6 4CDF 001C         	MOVEM.L	(SP)+,D2/D3/D4
+144  000062EA 4E75              	RTS
+145                             *	SECTION	14,,D
+146                             * allocations for .set_dma
+147                             *	D2	.p1
+148                             *	D4	.p2
+149                             *	D3	.p3
+150                             *	D1	.p4
+151                             *	16(SP)	.dma_adr
+152                             *	SECTION	9,,C
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  4
+ 
+
+Line Address
+153                             
+154                             * COMPILATION SUMMARY FOR .set_dma
+155                             *	CODE SIZE                	   72 BYTES
+156                             *	COMPILE-TIME DYNAMIC HEAP	 6388 BYTES
+157                             *	COMPILE-TIME GLOBAL HEAP 	21753 BYTES
+158                             	XDEF	.con_st
+159                             .con_st:
+160  000062EC 2078 65BC 4E71    	MOVE.L	.preq,A0
+161  000062F2 117C 0003 0006    	MOVE.B	#3,6(A0)
+162  000062F8 4EB8 6248         	JSR	.wakeup_pic
+163  000062FC 1000              	MOVE.B	D0,D0
+164  000062FE 7200              	MOVEQ	#0,D1
+165  00006300 1200              	MOVE.B	D0,D1	*fr
+166  00006302 2001              	MOVE.L	D1,D0
+167  00006304 4E75              	RTS
+168                             *	SECTION	14,,D
+169                             * allocations for .con_st
+170                             *	SECTION	9,,C
+171                             
+172                             * COMPILATION SUMMARY FOR .con_st
+173                             *	CODE SIZE                	   28 BYTES
+174                             *	COMPILE-TIME DYNAMIC HEAP	 3538 BYTES
+175                             *	COMPILE-TIME GLOBAL HEAP 	21936 BYTES
+176                             	XDEF	.con_in
+177                             .con_in:
+178  00006306 2078 65BC 4E71    	MOVE.L	.preq,A0
+179  0000630C 117C 0001 0006    	MOVE.B	#1,6(A0)
+180  00006312 4EB8 6248         	JSR	.wakeup_pic
+181  00006316 1000              	MOVE.B	D0,D0
+182  00006318 7200              	MOVEQ	#0,D1
+183  0000631A 1200              	MOVE.B	D0,D1	*fr
+184  0000631C 2001              	MOVE.L	D1,D0
+185  0000631E 4E75              	RTS
+186                             *	SECTION	14,,D
+187                             * allocations for .con_in
+188                             *	SECTION	9,,C
+189                             
+190                             * COMPILATION SUMMARY FOR .con_in
+191                             *	CODE SIZE                	   28 BYTES
+192                             *	COMPILE-TIME DYNAMIC HEAP	 3538 BYTES
+193                             *	COMPILE-TIME GLOBAL HEAP 	22119 BYTES
+194                             	XDEF	.con_out
+195                             .con_out:
+196  00006320 102F 0007         	MOVE.B	7(SP),D0
+197  00006324 2078 65BC 4E71    	MOVE.L	.preq,A0
+198  0000632A 117C 0002 0006    	MOVE.B	#2,6(A0)
+199  00006330 2078 65BC 4E71    	MOVE.L	.preq,A0
+200  00006336 1140 0007         	MOVE.B	D0,7(A0)
+201  0000633A 4EB8 6248         	JSR	.wakeup_pic
+202  0000633E 4E75              	RTS
+203                             *	SECTION	14,,D
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  5
+ 
+
+Line Address
+204                             * allocations for .con_out
+205                             *	7(SP)	.ch
+206                             *	SECTION	9,,C
+207                             
+208                             * COMPILATION SUMMARY FOR .con_out
+209                             *	CODE SIZE                	   34 BYTES
+210                             *	COMPILE-TIME DYNAMIC HEAP	 3206 BYTES
+211                             *	COMPILE-TIME GLOBAL HEAP 	22390 BYTES
+212                             	XDEF	.read
+213                             .read:
+214  00006340 2078 65BC 4E71    	MOVE.L	.preq,A0
+215  00006346 117C 0005 0006    	MOVE.B	#5,6(A0)
+216  0000634C 4EB8 6248         	JSR	.wakeup_pic
+217  00006350 3000              	MOVE.W	D0,D0
+218  00006352 3200              	MOVE.W	D0,D1
+219  00006354 7000              	MOVEQ	#0,D0
+220  00006356 3001              	MOVE.W	D1,D0	*fr
+221  00006358 4E75              	RTS
+222                             *	SECTION	14,,D
+223                             * allocations for .read
+224                             *	SECTION	9,,C
+225                             
+226                             * COMPILATION SUMMARY FOR .read
+227                             *	CODE SIZE                	   28 BYTES
+228                             *	COMPILE-TIME DYNAMIC HEAP	 3576 BYTES
+229                             *	COMPILE-TIME GLOBAL HEAP 	22598 BYTES
+230                             	XDEF	.write
+231                             .write:
+232  0000635A 102F 0007         	MOVE.B	7(SP),D0
+233  0000635E 2078 65BC 4E71    	MOVE.L	.preq,A0
+234  00006364 117C 0006 0006    	MOVE.B	#6,6(A0)
+235  0000636A 4EB8 6248         	JSR	.wakeup_pic
+236  0000636E 3000              	MOVE.W	D0,D0
+237  00006370 3200              	MOVE.W	D0,D1
+238  00006372 7000              	MOVEQ	#0,D0
+239  00006374 3001              	MOVE.W	D1,D0	*fr
+240  00006376 4E75              	RTS
+241                             *	SECTION	14,,D
+242                             * allocations for .write
+243                             *	7(SP)	.mode
+244                             *	SECTION	9,,C
+245                             
+246                             * COMPILATION SUMMARY FOR .write
+247                             *	CODE SIZE                	   32 BYTES
+248                             *	COMPILE-TIME DYNAMIC HEAP	 3933 BYTES
+249                             *	COMPILE-TIME GLOBAL HEAP 	22894 BYTES
+250                             	XDEF	.sectran
+251                             .sectran:
+252  00006378 2F02              	MOVE.L	D2,-(SP)
+253  0000637A 342F 000A         	MOVE.W	10(SP),D2
+254  0000637E 222F 000C         	MOVE.L	12(SP),D1
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  6
+ 
+
+Line Address
+255  00006382 4A81              	TST.L	D1
+256  00006384 670E              	BEQ.S	_L38
+257  00006386 7000              	MOVEQ	#0,D0
+258  00006388 3002              	MOVE.W	D2,D0	*fr
+259  0000638A D081              	ADD.L	D1,D0
+260  0000638C 7200              	MOVEQ	#0,D1
+261  0000638E 2040              	MOVE.L	D0,A0
+262  00006390 1210              	MOVE.B	(A0),D1	*fr
+263  00006392 6008              	BRA.S	_L36
+264                             _L38:
+265  00006394 7000              	MOVEQ	#0,D0
+266  00006396 3002              	MOVE.W	D2,D0	*fr
+267  00006398 5280              	ADDQ.L	#1,D0
+268  0000639A 3200              	MOVE.W	D0,D1
+269                             _L36:
+270  0000639C 7000              	MOVEQ	#0,D0
+271  0000639E 3001              	MOVE.W	D1,D0	*fr
+272  000063A0 241F              	MOVE.L	(SP)+,D2
+273  000063A2 4E75              	RTS
+274                             *	SECTION	14,,D
+275                             * allocations for .sectran
+276                             *	10(SP)	.s
+277                             *	12(SP)	.xp
+278                             *	SECTION	9,,C
+279                             
+280                             * COMPILATION SUMMARY FOR .sectran
+281                             *	CODE SIZE                	   44 BYTES
+282                             *	COMPILE-TIME DYNAMIC HEAP	 6536 BYTES
+283                             *	COMPILE-TIME GLOBAL HEAP 	23323 BYTES
+284                             	XDEF	.setxvect
+285                             .setxvect:
+286  000063A4 2F02              	MOVE.L	D2,-(SP)
+287  000063A6 322F 000A         	MOVE.W	10(SP),D1
+288  000063AA 242F 000C         	MOVE.L	12(SP),D2
+289  000063AE 7000              	MOVEQ	#0,D0
+290  000063B0 3001              	MOVE.W	D1,D0	*fr
+291  000063B2 E588              	LSL.L	#2,D0
+292  000063B4 2040              	MOVE.L	D0,A0
+293  000063B6 2010              	MOVE.L	(A0),D0
+294  000063B8 2082              	MOVE.L	D2,(A0)
+295  000063BA 241F              	MOVE.L	(SP)+,D2
+296  000063BC 4E75              	RTS
+297                             *	SECTION	14,,D
+298                             * allocations for .setxvect
+299                             *	D0	.oldval
+300                             *	A0	.vloc
+301                             *	10(SP)	.vnum
+302                             *	12(SP)	.vval
+303                             *	SECTION	9,,C
+304                             
+305                             * COMPILATION SUMMARY FOR .setxvect
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  7
+ 
+
+Line Address
+306                             *	CODE SIZE                	   26 BYTES
+307                             *	COMPILE-TIME DYNAMIC HEAP	 4465 BYTES
+308                             *	COMPILE-TIME GLOBAL HEAP 	23772 BYTES
+309                             	XDEF	.slctdsk
+310                             .slctdsk:
+311  000063BE 102F 0007         	MOVE.B	7(SP),D0
+312  000063C2 0C00 0003         	CMPI.B	#3,D0
+313  000063C6 6304              	BLS.S	_L48
+314  000063C8 7000              	MOVEQ	#0,D0
+315  000063CA 601E              	BRA.S	_L46
+316                             _L48:
+317  000063CC 2078 65BC 4E71    	MOVE.L	.preq,A0
+318  000063D2 1140 0008         	MOVE.B	D0,8(A0)
+319  000063D6 7200              	MOVEQ	#0,D1
+320  000063D8 1200              	MOVE.B	D0,D1	*fr
+321  000063DA 3001              	MOVE.W	D1,D0
+322  000063DC C0FC 001A         	MULU	#26,D0
+323  000063E0 207C 0000 6554    	MOVE.L	#.dphtab,A0
+324  000063E6 D0C0              	ADDA.W	D0,A0
+325  000063E8 2008              	MOVE.L	A0,D0
+326                             _L46:
+327  000063EA 4E75              	RTS
+328                             *	SECTION	14,,D
+329                             * allocations for .slctdsk
+330                             *	7(SP)	.dsk
+331                             *	SECTION	9,,C
+332                             
+333                             * COMPILATION SUMMARY FOR .slctdsk
+334                             *	CODE SIZE                	   46 BYTES
+335                             *	COMPILE-TIME DYNAMIC HEAP	 5103 BYTES
+336                             *	COMPILE-TIME GLOBAL HEAP 	24117 BYTES
+337                             	XDEF	.biosinit
+338                             .biosinit:
+339  000063EC 21FC 0000 0100    	MOVE.L	#256,.preq
+              65BC 4E71      
+340  000063F6 21FC 0008 0000    	MOVE.L	#524288,.pic
+              65C0 4E71      
+341  00006400 2078 65BC 4E71    	MOVE.L	.preq,A0
+342  00006406 4200              	CLR.B	D0
+343                             _L54:
+344  00006408 4218              	CLR.B	(A0)+
+345  0000640A 5200              	ADDQ.B	#1,D0
+346  0000640C 0C00 0012         	CMPI.B	#18,D0
+347  00006410 65F6              	BCS.S	_L54
+348  00006412 4E75              	RTS
+349                             *	SECTION	14,,D
+350                             * allocations for .biosinit
+351                             *	D0	.c
+352                             *	A0	.p
+353                             *	SECTION	9,,C
+354                             
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  8
+ 
+
+Line Address
+355                             * COMPILATION SUMMARY FOR .biosinit
+356                             *	CODE SIZE                	   40 BYTES
+357                             *	COMPILE-TIME DYNAMIC HEAP	 3750 BYTES
+358                             *	COMPILE-TIME GLOBAL HEAP 	24480 BYTES
+359                             	XDEF	.cbios
+360                             .cbios:
+361  00006414 48E7 2020         	MOVEM.L	D2/A2,-(SP)
+362  00006418 302F 000E         	MOVE.W	14(SP),D0
+363  0000641C 222F 0010         	MOVE.L	16(SP),D1
+364  00006420 242F 0014         	MOVE.L	20(SP),D2
+365  00006424 207C 0000 65BC    	MOVE.L	#.preq,A0
+366  0000642A 0C40 0016         	CMPI.W	#22,D0
+367  0000642E 6200 010A         	BHI	_L60
+368  00006432 D040              	ADD.W	D0,D0
+369  00006434 303B 0006         	MOVE.W	_L83(PC,D0.W),D0
+370  00006438 4EFB 0002         	JMP	_L84(PC,D0.W)
+371                             _L84:
+372                             _L83:
+373  0000643C 002E              	DC.W	_L80-_L84
+374  0000643E 0036              	DC.W	_L79-_L84
+375  00006440 003A              	DC.W	_L78-_L84
+376  00006442 0048              	DC.W	_L77-_L84
+377  00006444 004E              	DC.W	_L76-_L84
+378  00006446 005E              	DC.W	_L75-_L84
+379  00006448 005E              	DC.W	_L75-_L84
+380  0000644A 005E              	DC.W	_L75-_L84
+381  0000644C 0062              	DC.W	_L74-_L84
+382  0000644E 006C              	DC.W	_L73-_L84
+383  00006450 007C              	DC.W	_L72-_L84
+384  00006452 0094              	DC.W	_L71-_L84
+385  00006454 00AA              	DC.W	_L70-_L84
+386  00006456 00B2              	DC.W	_L69-_L84
+387  00006458 00B8              	DC.W	_L68-_L84
+388  0000645A 00BE              	DC.W	_L67-_L84
+389  0000645C 00C0              	DC.W	_L66-_L84
+390  0000645E 00FE              	DC.W	_L60-_L84
+391  00006460 00D2              	DC.W	_L65-_L84
+392  00006462 00DA              	DC.W	_L64-_L84
+393  00006464 00E4              	DC.W	_L63-_L84
+394  00006466 00FE              	DC.W	_L60-_L84
+395  00006468 00EC              	DC.W	_L61-_L84
+396                             _L80:
+397  0000646A 4EB8 63EC         	JSR	.biosinit
+398  0000646E 6000 00CA         	BRA	_L60
+399                             _L79:
+400  00006472 4EB8 622E         	JSR	.wboot
+401                             _L78:
+402  00006476 4EB8 62EC         	JSR	.con_st
+403                             _L89:
+404  0000647A 1000              	MOVE.B	D0,D0
+405  0000647C 7200              	MOVEQ	#0,D1
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  9
+ 
+
+Line Address
+406  0000647E 1200              	MOVE.B	D0,D1	*fr
+407  00006480 6000 00BA         	BRA	_L59
+408                             _L77:
+409  00006484 4EB8 6306         	JSR	.con_in
+410  00006488 60F0              	BRA.S	_L89
+411                             _L76:
+412  0000648A 7000              	MOVEQ	#0,D0
+413  0000648C 1001              	MOVE.B	D1,D0	*fr
+414  0000648E 2F00              	MOVE.L	D0,-(SP)
+415                             *			STACK OFFSET 4
+416  00006490 4EB8 6320         	JSR	.con_out
+417                             _L86:
+418                             *			STACK OFFSET 0
+419  00006494 588F              	ADDQ.L	#4,SP
+420  00006496 6000 00A2         	BRA	_L60
+421                             _L75:
+422  0000649A 6000 009E         	BRA	_L90
+423                             _L74:
+424  0000649E 2050              	MOVE.L	(A0),A0
+425  000064A0 4268 000A         	CLR.W	10(A0)
+426  000064A4 6000 0094         	BRA	_L60
+427                             _L73:
+428  000064A8 7000              	MOVEQ	#0,D0
+429  000064AA 1001              	MOVE.B	D1,D0	*fr
+430  000064AC 2F00              	MOVE.L	D0,-(SP)
+431                             *			STACK OFFSET 4
+432  000064AE 4EB8 63BE         	JSR	.slctdsk
+433                             *			STACK OFFSET 0
+434  000064B2 588F              	ADDQ.L	#4,SP
+435  000064B4 6000 0080         	BRA	_L93
+436                             _L72:
+437  000064B8 2450              	MOVE.L	(A0),A2
+438  000064BA 7000              	MOVEQ	#0,D0
+439  000064BC 3001              	MOVE.W	D1,D0	*fr
+440  000064BE 2F00              	MOVE.L	D0,-(SP)
+441                             *			STACK OFFSET 4
+442  000064C0 4EB8 626C         	JSR	.order_b2l
+443                             *			STACK OFFSET 0
+444  000064C4 588F              	ADDQ.L	#4,SP
+445  000064C6 3000              	MOVE.W	D0,D0
+446  000064C8 3540 000A         	MOVE.W	D0,10(A2)
+447  000064CC 6000 006C         	BRA	_L60
+448                             _L71:
+449  000064D0 2450              	MOVE.L	(A0),A2
+450  000064D2 7000              	MOVEQ	#0,D0
+451  000064D4 3001              	MOVE.W	D1,D0	*fr
+452  000064D6 2F00              	MOVE.L	D0,-(SP)
+453                             *			STACK OFFSET 4
+454  000064D8 4EB8 626C         	JSR	.order_b2l
+455                             *			STACK OFFSET 0
+456  000064DC 588F              	ADDQ.L	#4,SP
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  10
+ 
+
+Line Address
+457  000064DE 3000              	MOVE.W	D0,D0
+458  000064E0 3540 000C         	MOVE.W	D0,12(A2)
+459  000064E4 6054              	BRA.S	_L60
+460                             _L70:
+461  000064E6 2F01              	MOVE.L	D1,-(SP)
+462                             *			STACK OFFSET 4
+463  000064E8 4EB8 62A4         	JSR	.set_dma
+464  000064EC 60A6              	BRA.S	_L86
+465                             _L69:
+466  000064EE 4EB8 6340         	JSR	.read
+467  000064F2 6012              	BRA.S	_L87
+468                             _L68:
+469  000064F4 4EB8 635A         	JSR	.write
+470  000064F8 600C              	BRA.S	_L88
+471                             _L67:
+472  000064FA 603E              	BRA.S	_L91
+473                             _L66:
+474  000064FC 2F02              	MOVE.L	D2,-(SP)
+475                             *			STACK OFFSET 4
+476  000064FE 2F01              	MOVE.L	D1,-(SP)
+477                             *			STACK OFFSET 8
+478  00006500 4EB8 6378         	JSR	.sectran
+479                             *			STACK OFFSET 0
+480  00006504 508F              	ADDQ.L	#8,SP
+481                             _L87:
+482                             _L88:
+483  00006506 3200              	MOVE.W	D0,D1
+484  00006508 7000              	MOVEQ	#0,D0
+485  0000650A 3001              	MOVE.W	D1,D0	*fr
+486  0000650C 6028              	BRA.S	_L94
+487                             _L65:
+488  0000650E 223C 0000 6A44    	MOVE.L	#.memtab,D1
+489  00006514 6026              	BRA.S	_L59
+490                             _L64:
+491  00006516 7000              	MOVEQ	#0,D0
+492  00006518 3038 6A4E 4E71    	MOVE.W	.iobyte,D0	*fr
+493  0000651E 6016              	BRA.S	_L92
+494                             _L63:
+495  00006520 31C1 6A4E 4E71    	MOVE.W	D1,.iobyte
+496  00006526 6012              	BRA.S	_L60
+497                             _L61:
+498  00006528 2F02              	MOVE.L	D2,-(SP)
+499                             *			STACK OFFSET 4
+500  0000652A 7000              	MOVEQ	#0,D0
+501  0000652C 3001              	MOVE.W	D1,D0	*fr
+502  0000652E 2F00              	MOVE.L	D0,-(SP)
+503                             *			STACK OFFSET 8
+504  00006530 4EB8 63A4         	JSR	.setxvect
+505                             *			STACK OFFSET 0
+506  00006534 508F              	ADDQ.L	#8,SP
+507                             _L92:
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  11
+ 
+
+Line Address
+508                             _L93:
+509                             _L94:
+510  00006536 2200              	MOVE.L	D0,D1
+511  00006538 6002              	BRA.S	_L59
+512                             _L60:
+513                             _L90:
+514                             _L91:
+515  0000653A 7200              	MOVEQ	#0,D1
+516                             _L59:
+517  0000653C 2001              	MOVE.L	D1,D0
+518  0000653E 4CDF 0404         	MOVEM.L	(SP)+,D2/A2
+519  00006542 4E75              	RTS
+520                             *	SECTION	14,,D
+521                             * allocations for .cbios
+522                             *	14(SP)	.d0
+523                             *	16(SP)	.d1
+524                             *	20(SP)	.d2
+525                             *	SECTION	9,,C
+526                             
+527                             * COMPILATION SUMMARY FOR .cbios
+528                             *	CODE SIZE                	  330 BYTES
+529                             *	COMPILE-TIME DYNAMIC HEAP	30891 BYTES
+530                             *	COMPILE-TIME GLOBAL HEAP 	25280 BYTES
+531                             *	SECTION	14,,D
+532                             	XDEF	.dpb2
+533  00006544 00                .dpb2:	DC.B	0
+534  00006545 80                	DC.B	128
+535  00006546 04                	DC.B	4
+536  00006547 0F                	DC.B	15
+537  00006548 ==00000001=of=    	DCB.B	1,0
+              00                
+538  00006549 ==00000001=of=    	DCB.B	1,0
+              00                
+539  0000654A 07                	DC.B	7
+540  0000654B F7                	DC.B	247
+541  0000654C 03                	DC.B	3
+542  0000654D FF                	DC.B	255
+543  0000654E ==00000001=of=    	DCB.B	1,0
+              00                
+544  0000654F ==00000001=of=    	DCB.B	1,0
+              00                
+545  00006550 ==00000002=of=    	DCB.B	2,0
+              00                
+546  00006552 ==00000002=of=    	DCB.B	2,0
+              00                
+547                             	XDEF	.dphtab
+548  00006554 ==00000004=of=    .dphtab:	DCB.B	4,0
+              00                
+549  00006558 ==00000002=of=    	DCB.B	2,0
+              00                
+550  0000655A ==00000002=of=    	DCB.B	2,0
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  12
+ 
+
+Line Address
+              00                
+551  0000655C ==00000002=of=    	DCB.B	2,0
+              00                
+552  0000655E 0000 65C4         	DC.L	.dirbuf+0
+553  00006562 0000 6544         	DC.L	.dpb2
+554  00006566 ==00000004=of=    	DCB.B	4,0
+              00                
+555  0000656A 0000 6644         	DC.L	.alv0+0
+556  0000656E ==00000004=of=    	DCB.B	4,0
+              00                
+557  00006572 ==00000002=of=    	DCB.B	2,0
+              00                
+558  00006574 ==00000002=of=    	DCB.B	2,0
+              00                
+559  00006576 ==00000002=of=    	DCB.B	2,0
+              00                
+560  00006578 0000 65C4         	DC.L	.dirbuf+0
+561  0000657C 0000 6544         	DC.L	.dpb2
+562  00006580 ==00000004=of=    	DCB.B	4,0
+              00                
+563  00006584 0000 6744         	DC.L	.alv1+0
+564  00006588 ==00000004=of=    	DCB.B	4,0
+              00                
+565  0000658C ==00000002=of=    	DCB.B	2,0
+              00                
+566  0000658E ==00000002=of=    	DCB.B	2,0
+              00                
+567  00006590 ==00000002=of=    	DCB.B	2,0
+              00                
+568  00006592 0000 65C4         	DC.L	.dirbuf+0
+569  00006596 0000 6544         	DC.L	.dpb2
+570  0000659A ==00000004=of=    	DCB.B	4,0
+              00                
+571  0000659E 0000 6844         	DC.L	.alv2+0
+572  000065A2 ==00000004=of=    	DCB.B	4,0
+              00                
+573  000065A6 ==00000002=of=    	DCB.B	2,0
+              00                
+574  000065A8 ==00000002=of=    	DCB.B	2,0
+              00                
+575  000065AA ==00000002=of=    	DCB.B	2,0
+              00                
+576  000065AC 0000 65C4         	DC.L	.dirbuf+0
+577  000065B0 0000 6544         	DC.L	.dpb2
+578  000065B4 ==00000004=of=    	DCB.B	4,0
+              00                
+579  000065B8 0000 6944         	DC.L	.alv3+0
+580                             *	XREF	.wboot
+581                             	XDEF	.preq
+582  000065BC ==00000004=of=    .preq:	DCB.B	4,0
+              00                
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  13
+ 
+
+Line Address
+583                             	XDEF	.pic
+584  000065C0 ==00000004=of=    .pic:	DCB.B	4,0
+              00                
+585                             	XDEF	.dirbuf
+586  000065C4 ==00000080=of=    .dirbuf:	DCB.B	128,0
+              00                
+587                             	XDEF	.alv0
+588  00006644 ==00000100=of=    .alv0:	DCB.B	256,0
+              00                
+589                             	XDEF	.alv1
+590  00006744 ==00000100=of=    .alv1:	DCB.B	256,0
+              00                
+591                             	XDEF	.alv2
+592  00006844 ==00000100=of=    .alv2:	DCB.B	256,0
+              00                
+593                             	XDEF	.alv3
+594  00006944 ==00000100=of=    .alv3:	DCB.B	256,0
+              00                
+595                             	XDEF	.memtab
+596  00006A44 ==0000000A=of=    .memtab:	DCB.B	10,0
+              00                
+597                             	XDEF	.iobyte
+598  00006A4E ==00000002=of=    .iobyte:	DCB.B	2,0
+              00                
+599                             * allocations for module
+600                             *	common	.preq
+601                             *	common	.pic
+602                             *	common	.dirbuf
+603                             *	common	.alv0
+604                             *	common	.alv1
+605                             *	common	.alv2
+606                             *	common	.alv3
+607                             *	common	.dpb2
+608                             *	common	.dphtab
+609                             *	common	.memtab
+610                             *	common	.iobyte
+611                             *	SECTION	9,,C
+612                             
+613                             * COMPILATION SUMMARY FOR MODULE
+614                             *	CODE SIZE                	  800 BYTES
+615                             	END
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  14
+ 
+
+                   Symbol Table
+
+Label            Value
+
+.ALV0          00006644
+.ALV1          00006744
+.ALV2          00006844
+.ALV3          00006944
+.BIOSINIT      000063EC
+.CBIOS         00006414
+.CON_IN        00006306
+.CON_OUT       00006320
+.CON_ST        000062EC
+.DIRBUF        000065C4
+.DPB2          00006544
+.DPHTAB        00006554
+.INIT          00006200
+.IOBYTE        00006A4E
+.MEMTAB        00006A44
+.ORDER_B2L     0000626C
+.PIC           000065C0
+.PREQ          000065BC
+.READ          00006340
+.SECTRAN       00006378
+.SETXVECT      000063A4
+.SET_DMA       000062A4
+.SLCTDSK       000063BE
+.WAKEUP_PIC    00006248
+.WBOOT         0000622E
+.WRITE         0000635A
+CPM            00000400
+ENTRY          00006234
+MEM_END        00080000
+START_BIOS     00006200
+TPA_S          00008000
+TPA_SIZE       00078000
+TRAP3          0000008C
+_BDOS          000004CA
+_CCP           000004BC
+_L36           0000639C
+_L38           00006394
+_L4            00006250
+_L46           000063EA
+_L48           000063CC
+_L54           00006408
+_L59           0000653C
+_L60           0000653A
+_L61           00006528
+_L63           00006520
+_L64           00006516
+_L65           0000650E
+_L66           000064FC
+_L67           000064FA
+_L68           000064F4
+_L69           000064EE
+_L70           000064E6
+Microtec Research ASM68000   Version 6.6A    Wed Jun 19 13:40:11 2024    Page  15
+ 
+
+_L71           000064D0
+_L72           000064B8
+_L73           000064A8
+_L74           0000649E
+_L75           0000649A
+_L76           0000648A
+_L77           00006484
+_L78           00006476
+_L79           00006472
+_L80           0000646A
+_L83           0000643C
+_L84           0000643C
+_L86           00006494
+_L87           00006506
+_L88           00006506
+_L89           0000647A
+_L90           0000653A
+_L91           0000653A
+_L92           00006536
+_L93           00006536
+_L94           00006536
+
+
+ Errors: 0, Warnings: 0

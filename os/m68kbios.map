@@ -1,0 +1,42 @@
+Microtec LNK68K Linker  Version 6.6A
+Copyright (c) 1985-1989 Microtec Research Inc.
+ALL RIGHTS RESERVED.  Serial Number M-002201
+
+Microtec Research  LNK68K   Version 6.6A    Wed Jun 19 13:40:12 2024    Page   1
+
+Command line: C:\DOS\MRI68K\ASM68K\LNK68K.EXE  -m -o m68kbios.s m68kbios.obj 
+
+LOAD m68kbios.obj
+Microtec Research  LNK68K   Version 6.6A    Wed Jun 19 13:40:12 202    Page   2
+
+
+
+OUTPUT MODULE NAME:    m68kbios
+OUTPUT MODULE FORMAT:  MOTOROLA S2
+
+
+SECTION SUMMARY
+---------------
+
+SECTION    ATTRIBUTE                     START      END        LENGTH     ALIGN
+
+           ABSOLUTE                      00006200   00006A4F   00000850   0 (BYTE)  
+0          NORMAL                        00000000   00000000   00000000   2 (WORD)  
+
+
+MODULE SUMMARY
+--------------
+
+MODULE         SECTION:START        SECTION:END       FILE
+
+M68CBIOS             0:00000000           0:00000000  C:\USERS\TBS\AKIHITO\68008\MEZ68K~1\REV1.3\OS\m68kbios.obj   
+                      :00006200            :00006A4F      
+
+
+
+START ADDRESS:   00000000
+
+Load Completed 
+
+
+ Errors: 0, Warnings: 0
