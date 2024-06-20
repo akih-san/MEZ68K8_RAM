@@ -1,6 +1,3 @@
-# 工事中
-<br>
-
 # MEZ68K8_RAM<br>
 <br>
 EMUZ80で、MC68008を動かすメザニンボードとして、＠S_OkueさんのMEZ68008<br>
