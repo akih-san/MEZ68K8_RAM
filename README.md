@@ -24,10 +24,10 @@ MEZ68K8_RAMを作成しました。MEZ68008と同様に、EMUZ80にアドオン�
 メモリとSDカードを追加することにより、CP/M-68Kを動かすことが出来ました。<br>
 
 MEZ68K8_RAMを搭載したEMUZ80<br>
-![MEZ68K8_RAM 1](photo/????????)
+![MEZ68K8_RAM 1](photo/P1020594.JPG)
 
 MEZ68K8_RAM拡大<br>
-![MEZ68K8_RAM 2](photo/??????????)
+![MEZ68K8_RAM 2](photo/P1020610.JPG)
 
 # 特徴<br>
 <br>
@@ -42,15 +42,15 @@ MEZ68K8_RAM拡大<br>
     3) CP/M-68K<br>
 <br>
 Enhanced 68k BASICの起動画面<br>
-![MEZ68K8_RAM 3](photo/cpm_open.png)
+![MEZ68K8_RAM 3](photo/?????)
 
 
 Universal Monitor 68000の起動画面<br>
-![MEZ68K8_RAM 4](photo/cpm_open.png)
+![MEZ68K8_RAM 4](photo/?????)
 
 
 CP/M-68Kの起動画面<br>
-![MEZ68K8_RAM 5](photo/cpm_open.png)
+![MEZ68K8_RAM 5](photo/?????)
 
 
 MEZ88_RAMシルク画像<br>
@@ -114,6 +114,8 @@ https://sourceforge.net/projects/bin2mot/files/<br>
 　http://star.gmobb.jp/koji/cgi/wiki.cgi?page=CpmtoolsGUI<br>
 <br>
 <br>
+# 注意
+WindowsのPower
 # 参考
 ＜EMUZ80＞<br>
 EUMZ80はZ80CPUとPIC18F47Q43のDIP40ピンIC2つで構成されるシンプルなコンピュータです。<br>
