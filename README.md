@@ -47,7 +47,7 @@ MEZ68K8_RAM拡大<br>
 　　3) CP/M-68K<br>
 <br>
 Enhanced 68k BASICの起動画面<br>
-![MEZ68K8_RAM 3](photo/?????)
+![MEZ68K8_RAM 3](photo/basic68k.png)
 
 
 ASCIIARTの実行結果
