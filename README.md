@@ -22,9 +22,11 @@ https://vintagechips.wordpress.com/2022/03/05/emuz80_reference  <br>
 MEZ68K8_RAMを作成しました。MEZ68008と同様に、EMUZ80にアドオンすることで<br>
 作動します。<br>
 メモリとSDカードを追加することにより、CP/M-68Kを動かすことが出来ました。<br>
+<br>
 
 MEZ68K8_RAMを搭載したEMUZ80<br>
 ![MEZ68K8_RAM 1](photo/P1020594.JPG)
+<br>
 
 MEZ68K8_RAM拡大<br>
 ![MEZ68K8_RAM 2](photo/P1020610.JPG)
@@ -37,9 +39,9 @@ MEZ68K8_RAM拡大<br>
 ・μSDカードI/F（SPI)<br>
 ・UART（9600bps無手順）<br>
 ・動作ソフト（起動時に選択可能）<br>
-    1) Enhanced 68k BASIC Version 3.54<br>
-    2) Universal Monitor 68000<br>
-    3) CP/M-68K<br>
+　　1) Enhanced 68k BASIC Version 3.54<br>
+　　2) Universal Monitor 68000<br>
+　　3) CP/M-68K<br>
 <br>
 Enhanced 68k BASICの起動画面<br>
 ![MEZ68K8_RAM 3](photo/?????)
@@ -59,8 +61,8 @@ MEZ88_RAMシルク画像<br>
 
 # ファームウェア（FW）
 @hanyazouさんが作成したZ80で動作しているCP/M-80用のFWを<br>
-(https://github.com/hanyazou/SuperMEZ80)源流（ベース）にしています<br>。
-今回は、MEZ88_RAM（https://github.com/akih-san/MEZ88_RAM）用のFWを<br>
+(https://github.com/hanyazou/SuperMEZ80) 源流（ベース）にしています。<br>
+今回は、MEZ88_RAM（https://github.com/akih-san/MEZ88_RAM） 用のFWを<br>
 ベースにMEZ68K8_RAM用のFWとして動作するように修正を加えました。<br>
 <br>
 <br>
