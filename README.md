@@ -28,7 +28,7 @@ MEZ68K8_RAMを作成しました。MEZ68008と同様に、EMUZ80にアドオン�
 <br>
 
 MEZ68K8_RAMを搭載したEMUZ80<br>
-![MEZ68K8_RAM 1](photo/P1020594.JPG)
+![MEZ68K8_RAM 1](photo/P1020614.JPG)
 <br>
 
 MEZ68K8_RAM拡大<br>
