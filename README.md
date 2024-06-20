@@ -46,17 +46,17 @@ MEZ68K8_RAM拡大<br>
 　　2) Universal Monitor 68000<br>
 　　3) CP/M-68K<br>
 <br>
+
 Enhanced 68k BASICの起動画面<br>
 ![MEZ68K8_RAM 3](photo/basic68k.png)
 
 
-ASCIIARTの実行結果
+ASCIIARTの実行結果<br>
 ![MEZ68K8_RAM 8](photo/ascii.png)
 
 
-
 Universal Monitor 68000の起動画面<br>
-![MEZ68K8_RAM 4](photo/unimon)
+![MEZ68K8_RAM 4](photo/unimon.png)
 
 
 CP/M-68Kの起動画面<br>
