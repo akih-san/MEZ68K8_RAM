@@ -65,8 +65,8 @@ MEZ88_RAMシルク画像<br>
 <br>
 <br>
 # CBIOSの開発環境
-CP/M-68K Ver1.3は、ここで（http://www.cpm.z80.de/binary.html）入手できます。<br>
-また、ここでも（http://www.easyaudiokit.com/bekkan2020/try_cpm68k/cpm68k.html）<br>
+CP/M-68K Ver1.3は、ここで（http://www.cpm.z80.de/binary.html） 入手できます。<br>
+また、ここでも（http://www.easyaudiokit.com/bekkan2020/try_cpm68k/cpm68k.html） <br>
 入手出来ます。<br>
 CBIOS.BINは、DISK9にあるXBIOS.Cをベースに作成しました。<br>
 Ｃコンパイラ、アセンブラは、Microtech Researchのクロス開発環境を使用しました。<br>
@@ -76,7 +76,7 @@ https://archive.org/details/mri-68-k-c-cross-compiler-toolchain<br>
 MSDOS上で動きますが、Windowsでは動作しないため、MSDOSが動く環境が必要になります。<br>
 MEZ68K8_RAMでは、Windows上で動くエミュレーターとして有名なtakeda氏の<br>
 msdos playerを使用しました。<br>
-ここから（http://takeda-toshiya.my.coocan.jp/msdos/）入手できます。<br>
+ここから（http://takeda-toshiya.my.coocan.jp/msdos/） 入手できます。<br>
 こちらも、参考になるかと。<br>
 http://iamdoingse.livedoor.blog/archives/24144518.html<br>
 <br>
@@ -103,7 +103,7 @@ https://sourceforge.net/projects/bin2mot/files/<br>
 <br>
 ・universal moniter 68000、及びEnhanced 68k BASICは、Macro Assembler AS V1.42を<br>
 　使用してバイナリを作成しています。<br>
-　ここから（http://john.ccac.rwth-aachen.de:8000/as/）入手できます。<br>
+　ここから（http://john.ccac.rwth-aachen.de:8000/as/） 入手できます。<br>
 <br>
 ・FatFsはR0.15を使用しています。<br>
 　＜FatFs - Generic FAT Filesystem Module＞<br>
