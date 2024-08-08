@@ -60,7 +60,7 @@ CP/M-68Kの起動画面<br>
 ![MEZ68K8_RAM 5](photo/cpm68k.png)
 
 
-MEZ68K8シルク画像<br>
+MEZ68K8_RAMシルク画像<br>
 ![MEZ68K8_RAM 6](photo/093906.png)
 
 
