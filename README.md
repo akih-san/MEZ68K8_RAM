@@ -72,6 +72,7 @@ MEZ68K8_RAMシルク画像<br>
 <br>
 <br>
 # CBIOSの開発環境
+http://www.cpm.z80.de/binary.html
 CP/M-68K Ver1.3は、ここで（http://www.cpm.z80.de/binary.html） 入手できます。<br>
 また、ここでも（http://www.easyaudiokit.com/bekkan2020/try_cpm68k/cpm68k.html） <br>
 入手出来ます。<br>
