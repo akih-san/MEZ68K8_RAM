@@ -72,8 +72,8 @@ MEZ68K8_RAMシルク画像<br>
 <br>
 <br>
 # CBIOSの開発環境
-CP/M-68K Ver1.3は、ここで(http://www.cpm.z80.de/binary.html)入手できます。<br>
-また、ここでも(http://www.easyaudiokit.com/bekkan2020/try_cpm68k/cpm68k.html) <br>
+CP/M-68K Ver1.3は、[ここで](http://www.cpm.z80.de/binary.html)入手できます。<br>
+また、[ここでも](http://www.easyaudiokit.com/bekkan2020/try_cpm68k/cpm68k.html) <br>
 入手出来ます。<br>
 CBIOS.BINは、DISK9にあるXBIOS.Cをベースに作成しました。<br>
 Ｃコンパイラ、アセンブラは、Microtech Researchのクロス開発環境を使用しました。<br>
