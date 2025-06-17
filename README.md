@@ -109,7 +109,7 @@ https://sourceforge.net/projects/bin2mot/files/<br>
 <br>
 ・universal moniter 68000、及びEnhanced 68k BASICは、Macro Assembler AS V1.42を<br>
 　使用してバイナリを作成しています。<br>
-　ここから（http://john.ccac.rwth-aachen.de:8000/as/） 入手できます。<br>
+　ここから(http://john.ccac.rwth-aachen.de:8000/as/) 入手できます。<br>
 <br>
 ・FatFsはR0.15を使用しています。<br>
 　＜FatFs - Generic FAT Filesystem Module＞<br>
