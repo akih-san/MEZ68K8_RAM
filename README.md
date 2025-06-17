@@ -105,7 +105,7 @@ https://sourceforge.net/projects/bin2mot/files/<br>
 　「MPLAB® X Integrated Development Environment (IDE)」<br>
 <br>
 　を使っています。（MPLAB X IDE v6.20）コンパイラは、XC8を使用しています。<br>
-（https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide）<br>
+(https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide)<br>
 <br>
 ・universal moniter 68000、及びEnhanced 68k BASICは、Macro Assembler AS V1.42を<br>
 　使用してバイナリを作成しています。<br>
